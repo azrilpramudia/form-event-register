@@ -10,7 +10,10 @@ const App = () => {
     kelas: "",
     angkatan: "",
     bukti: null,
+    previewURL: null,
   });
+
+  const [showPreview, setShowPreview] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -150,24 +153,83 @@ const App = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Bukti Pembayaran
             </label>
-            <input
-              type="file"
-              name="bukti"
-              accept="image/*,application/pdf"
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full"
-            />
+
+            <label
+              htmlFor="bukti"
+              className="flex items-center justify-center w-full p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white text-gray-500 hover:border-blue-500 hover:text-blue-600 transition"
+              onClick={() => {
+                if (formData.previewURL) setShowPreview(true);
+              }}
+            >
+              <svg
+                className="w-6 h-6 mr-2 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828L18 9m-3-2h4m0 0v4"
+                />
+              </svg>
+              <span>
+                {formData.bukti
+                  ? formData.bukti.name
+                  : "Klik untuk unggah bukti pembayaran"}
+              </span>
+              <input
+                id="bukti"
+                type="file"
+                name="bukti"
+                accept="image/*,application/pdf"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const fileURL = URL.createObjectURL(file);
+                    setFormData({
+                      ...formData,
+                      bukti: file,
+                      previewURL: file.type.startsWith("image")
+                        ? fileURL
+                        : null,
+                    });
+                  }
+                }}
+                required
+                className="hidden"
+              />
+            </label>
+
+            {/* Modal Preview Gambar */}
+            {showPreview && formData.previewURL && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+                <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full relative">
+                  <button
+                    onClick={() => setShowPreview(false)}
+                    className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl"
+                  >
+                    &times;
+                  </button>
+                  <img
+                    src={formData.previewURL}
+                    alt="Preview Bukti"
+                    className="w-full rounded-md object-contain max-h-[80vh]"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition"
           >
-            Daftar
+            Register
           </button>
         </form>
       </div>
