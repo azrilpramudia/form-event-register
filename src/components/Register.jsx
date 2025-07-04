@@ -45,6 +45,7 @@ const App = () => {
           onSubmit={handleSubmit}
           className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md space-y-4"
         >
+          {/* Nama Lengkap */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Nama Lengkap
@@ -59,6 +60,7 @@ const App = () => {
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -73,6 +75,7 @@ const App = () => {
             />
           </div>
 
+          {/* Nomor Telepon */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Nomor Telepon
@@ -87,6 +90,7 @@ const App = () => {
             />
           </div>
 
+          {/* NIM */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               NIM
@@ -101,44 +105,48 @@ const App = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Kelas
-            </label>
-            <select
-              name="kelas"
-              value={formData.kelas}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
-            >
-              <option value="">Pilih Kelas</option>
-              <option value="A">A2</option>
-              <option value="B">B2</option>
-            </select>
-          </div>
+          <div className="flex gap-4">
+            {/* Kelas */}
+            <div className="w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Kelas
+              </label>
+              <select
+                name="kelas"
+                value={formData.kelas}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
+              >
+                <option value="">Pilih Kelas</option>
+                <option value="A">A2</option>
+                <option value="B">B2</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Angkatan
-            </label>
-            <select
-              name="angkatan"
-              value={formData.angkatan}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
-            >
-              <option value="">Pilih Angkatan</option>
-              {[...Array(3)].map((_, i) => {
-                const year = 2022 + i;
-                return (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                );
-              })}
-            </select>
+            {/* Angkatan */}
+            <div className="w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Angkatan
+              </label>
+              <select
+                name="angkatan"
+                value={formData.angkatan}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
+              >
+                <option value="">Pilih Angkatan</option>
+                {[...Array(3)].map((_, i) => {
+                  const year = 2022 + i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
 
           <div>
