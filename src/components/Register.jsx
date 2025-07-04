@@ -1,5 +1,6 @@
 import { useState } from "react";
-import bgImage from "../assets/bg.jpg"; // pastikan file ada
+import bgImage from "../assets/bg.jpg";
+import toast from "react-hot-toast";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const App = () => {
   });
 
   const [showPreview, setShowPreview] = useState(false);
+  const [fileError] = useState("");
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -189,7 +191,20 @@ const App = () => {
                 accept="image/*,application/pdf"
                 onChange={(e) => {
                   const file = e.target.files[0];
+                  const maxSize = 2 * 1024 * 1024; // 2MB
+
                   if (file) {
+                    if (file.size > maxSize) {
+                      toast.error("Ukuran file maksimal 2MB!");
+                      setFormData({
+                        ...formData,
+                        bukti: null,
+                        previewURL: null,
+                      });
+                      e.target.value = "";
+                      return;
+                    }
+
                     const fileURL = URL.createObjectURL(file);
                     setFormData({
                       ...formData,
@@ -204,6 +219,9 @@ const App = () => {
                 className="hidden"
               />
             </label>
+            {fileError && (
+              <p className="mt-2 text-sm text-red-600">{fileError}</p>
+            )}
 
             {/* Modal Preview Gambar */}
             {showPreview && formData.previewURL && (
