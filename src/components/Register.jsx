@@ -12,6 +12,7 @@ const App = () => {
     angkatan: "",
     bukti: null,
     previewURL: null,
+    isPDF: false,
   });
 
   const [showPreview, setShowPreview] = useState(false);
@@ -154,17 +155,16 @@ const App = () => {
             </div>
           </div>
 
+          {/* Bukti Pembayaran */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Bukti Pembayaran
             </label>
 
+            {/* Upload Area */}
             <label
               htmlFor="bukti"
               className="flex items-center justify-center w-full p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white text-gray-500 hover:border-blue-500 hover:text-blue-600 transition"
-              onClick={() => {
-                if (formData.previewURL) setShowPreview(true);
-              }}
             >
               <svg
                 className="w-6 h-6 mr-2 text-gray-400"
@@ -200,6 +200,7 @@ const App = () => {
                         ...formData,
                         bukti: null,
                         previewURL: null,
+                        isPDF: false,
                       });
                       e.target.value = "";
                       return;
@@ -209,9 +210,8 @@ const App = () => {
                     setFormData({
                       ...formData,
                       bukti: file,
-                      previewURL: file.type.startsWith("image")
-                        ? fileURL
-                        : null,
+                      previewURL: fileURL,
+                      isPDF: file.type === "application/pdf",
                     });
                   }
                 }}
@@ -219,25 +219,45 @@ const App = () => {
                 className="hidden"
               />
             </label>
+
+            {/* Tombol Lihat Preview */}
+            {formData.previewURL && (
+              <button
+                type="button"
+                onClick={() => setShowPreview(true)}
+                className="mt-2 text-sm text-blue-600 underline hover:text-blue-800 transition"
+              >
+                Lihat Preview {formData.isPDF ? "PDF" : "Gambar"}
+              </button>
+            )}
+
             {fileError && (
               <p className="mt-2 text-sm text-red-600">{fileError}</p>
             )}
 
-            {/* Modal Preview Gambar */}
+            {/* Modal Preview */}
             {showPreview && formData.previewURL && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-                <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full relative">
+                <div className="bg-white p-4 rounded-lg shadow-lg max-w-3xl w-full relative">
                   <button
                     onClick={() => setShowPreview(false)}
                     className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl"
                   >
                     &times;
                   </button>
-                  <img
-                    src={formData.previewURL}
-                    alt="Preview Bukti"
-                    className="w-full rounded-md object-contain max-h-[80vh]"
-                  />
+                  {formData.isPDF ? (
+                    <iframe
+                      src={formData.previewURL}
+                      title="Preview PDF"
+                      className="w-full h-[80vh] rounded"
+                    />
+                  ) : (
+                    <img
+                      src={formData.previewURL}
+                      alt="Preview Bukti"
+                      className="w-full rounded-md object-contain max-h-[80vh]"
+                    />
+                  )}
                 </div>
               </div>
             )}
