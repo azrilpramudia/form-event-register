@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import bgImage from "../assets/bg.jpg"; // pastikan file ada
 
 const App = () => {
@@ -130,8 +130,8 @@ const App = () => {
               className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
             >
               <option value="">Pilih Angkatan</option>
-              {[...Array(7)].map((_, i) => {
-                const year = 2019 + i;
+              {[...Array(3)].map((_, i) => {
+                const year = 2022 + i;
                 return (
                   <option key={year} value={year}>
                     {year}
